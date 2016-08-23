@@ -1,0 +1,13 @@
+[Desktop Entry]
+Encoding=UTF-8
+Name=Nanotec
+Comment=Nanotec P2P Cryptocurrency
+Comment[ru]=Nanotec, P2P криптовалюта
+Comment[fr]=Nanotec, monnaie virtuelle cryptographique pair à pair
+Comment[tr]=Nanotec, eşten eşe kriptografik sanal para birimi
+Exec=/usr/bin/Nanotec-qt
+Terminal=false
+Type=Application
+Icon=/usr/share/pixmaps/Nanotec80.xpm
+MimeType=x-scheme-handler/Nanotec;
+Categories=Office;

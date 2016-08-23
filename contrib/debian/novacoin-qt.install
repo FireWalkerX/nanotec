@@ -1,0 +1,5 @@
+Nanotec-qt usr/bin
+share/pixmaps/Nanotec32.xpm usr/share/pixmaps
+share/pixmaps/Nanotec80.xpm usr/share/pixmaps
+debian/Nanotec-qt.desktop usr/share/applications
+debian/Nanotec-qt.protocol usr/share/kde4/services/

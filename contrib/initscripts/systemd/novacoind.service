@@ -1,0 +1,11 @@
+[Unit]
+Description=Nanotec daemon serivce
+After=network.target
+
+[Service]
+Type=simple
+User=Nanotec
+ExecStart=/opt/Nanotec/Nanotecd
+
+[Install]
+WantedBy=multi-user.target

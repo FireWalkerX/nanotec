@@ -1,0 +1,2 @@
+debian/bin/Nanotecd usr/bin
+src/Nanotecd usr/lib/Nanotec

@@ -1,0 +1,68 @@
+#!/bin/sh
+
+# PROVIDE: Nanotec
+# REQUIRE: LOGIN
+# KEYWORD: shutdown
+
+#
+# Add the following lines to /etc/rc.conf.local or /etc/rc.conf
+# to enable this service:
+#
+# Nanotec_enable (bool): Set to NO by default. Set this variable to YES if you want to enable Nanotec service.
+# Nanotec_config (path): Set to /usr/local/etc/Nanotec.conf by default.
+# Nanotec_user:  The user account Nanotec daemon runs as. It uses 'root' user by default.
+# Nanotec_group: The group account Nanotec daemon runs as. It uses 'wheel' group by default.
+# Nanotec_datadir (str): Default to "/var/db/Nanotec". Base data directory.
+
+. /etc/rc.subr
+
+name=Nanotec
+rcvar=Nanotec_enable
+
+: ${Nanotec_enable:=NO}
+: ${Nanotec_config=/usr/local/etc/Nanotec.conf}
+: ${Nanotec_datadir=/var/db/Nanotec}
+: ${Nanotec_user="root"}
+: ${Nanotec_group="wheel"}
+
+required_files=${Nanotec_config}
+command=/usr/local/bin/Nanotecd
+Nanotec_chdir=${Nanotec_datadir}
+pidfile="${Nanotec_datadir}/Nanotecd.pid"
+stop_cmd=Nanotec_stop
+command_args="-conf=${Nanotec_config} -datadir=${Nanotec_datadir} -daemon -pid=${pidfile}"
+start_precmd="${name}_prestart"
+
+Nanotec_create_datadir()
+{
+	echo "Creating data directory"
+	eval mkdir -p ${Nanotec_datadir}
+	[ $? -eq 0 ] && chown -R ${Nanotec_user}:${Nanotec_group} ${Nanotec_datadir}
+}
+
+Nanotec_prestart()
+{
+	if [ ! -d "${Nanotec_datadir}/." ]; then
+		Nanotec_create_datadir || return 1
+	fi
+}
+
+Nanotec_requirepidfile()
+{
+	if [ ! "0`check_pidfile ${pidfile} ${command}`" -gt 1 ]; then
+		echo "${name} not running? (check $pidfile)."
+		exit 1
+	fi
+}
+
+Nanotec_stop()
+{
+    Nanotec_requirepidfile
+
+	echo "Stopping ${name}."
+	eval ${command} -conf=${Nanotec_config} -datadir=${Nanotec_datadir} stop
+	wait_for_pids ${rc_pid}
+}
+
+load_rc_config $name
+run_rc_command "$1"
